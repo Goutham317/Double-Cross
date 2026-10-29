@@ -1,17 +1,27 @@
-# DOUBLE CROSS — Deployable Multiplayer Game
+# DOUBLE CROSS — Multiplayer Game
 
-This repository contains the source archive and a Render Blueprint for deploying DOUBLE CROSS as a single public service.
+This repository deploys DOUBLE CROSS as one Node.js Web Service that serves the Vite frontend and Socket.IO backend from the same public origin.
 
-## Deploy
+## Source layout required
 
-1. Open https://dashboard.render.com/blueprints/new and connect this repository.
-2. Review the `render.yaml` Blueprint and create the service.
-3. Wait for the first deploy to finish, then open the generated `https://...` URL.
-4. Verify `/health` returns JSON with `"ok": true`.
-5. Open the root URL in a private window and test room creation. For multiplayer, ask another person to open the same URL on a separate device/browser and join the same room code.
+The repository root must contain:
 
-## Architecture
+- `client/` — React + TypeScript + Vite app, including `package-lock.json`
+- `server/` — Node.js + TypeScript + Express + Socket.IO app, including `package-lock.json`
+- `Dockerfile` and `render.yaml`
 
-Render extracts `double-cross-source.zip`, builds the Vite client and the TypeScript Socket.IO server, and runs one Node Web Service. The server serves the client bundle from the same origin, so production Socket.IO uses HTTPS/WSS on the hosted URL. Local development remains the two-terminal setup in the extracted archive's README.
+The actual `client/` and `server/` folders still need to be pushed to this repository from the deployment-ready source ZIP.
 
-No `node_modules`, secrets, or local build outputs are committed.
+## Deploy on Render
+
+1. Push the `client/` and `server/` folders to this repository's `main` branch.
+2. Connect the GitHub repository to Render: https://dashboard.render.com/blueprints/new
+3. Create a Blueprint from `render.yaml`. It creates a Docker web service named `double-cross`.
+4. Wait for the deploy to finish. Open the generated HTTPS URL and check `/health` returns `{"ok":true,"service":"double-cross-server"}`.
+5. Test room creation and have another player open the same public URL from a separate device/browser to join by room code.
+
+## Local development
+
+Run server and client separately using the README included with the source project. The client uses `http://localhost:3001` by default in development and the current public origin in production.
+
+Do not submit the public URL until health and external multiplayer tests pass.
