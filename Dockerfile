@@ -5,11 +5,12 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-COPY double-cross-source.zip /tmp/double-cross-source.zip
+COPY double-cross-source-*.b64 /tmp/source-archive/
 
-RUN unzip -q /tmp/double-cross-source.zip -d /tmp/dc-source \
+RUN cat /tmp/source-archive/double-cross-source-*.b64 | base64 -d > /tmp/double-cross-source.zip \
+    && unzip -q /tmp/double-cross-source.zip -d /tmp/dc-source \
     && cp -a "/tmp/dc-source/Double Cross/." /app/ \
-    && rm -rf /tmp/dc-source /tmp/double-cross-source.zip
+    && rm -rf /tmp/dc-source /tmp/double-cross-source.zip /tmp/source-archive
 
 WORKDIR /app/server
 RUN npm ci && npm run build
