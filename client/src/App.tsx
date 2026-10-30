@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { io, type Socket } from 'socket.io-client';
 import './App.css';
 
-const SERVER_URL = 'http://localhost:3001';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL?.trim() || 'http://localhost:3001';
 const SESSION_KEY = 'double-cross-session';
 
 type Player = {
