@@ -33,8 +33,8 @@ io.on('connection', socket => {
 
 const port = Number(process.env.PORT ?? 3001);
 
-httpServer.listen(port, '127.0.0.1', () => {
+httpServer.listen(port, '0.0.0.0', () => {
   console.log(
-    `DOUBLE CROSS server listening on http://localhost:${port}`,
+    `DOUBLE CROSS server listening on port ${port}`,
   );
 });
